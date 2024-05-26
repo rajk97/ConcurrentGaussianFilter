@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.10)
 project(mtgp)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS_RELEASE "-03 -marc=native")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native")
 set(CMAKE_BUILD_TYPE Release)
 
 find_package(OpenCV REQUIRED)
@@ -30,9 +30,9 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/tracy/public/tracy
 )
 
-set(SOURCES
-    src/main.cpp
-    src/tracy/public/TracyClient.cpp    
+file(GLOB SOURCES
+    "src/*.cpp"
+    "src/tracy/public/TracyClient.cpp"
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})

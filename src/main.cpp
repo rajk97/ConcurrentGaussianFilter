@@ -6,9 +6,8 @@
  #define MY_PROFILE_SCOPE
 #endif
 
-#define _GNU_SOURCE 
 
-#include <pthreah.h>
+#include <pthread.h>
 #include <sched.h>
 #include <iostream>
 #include <thread>
@@ -17,7 +16,25 @@
 #include <opencv2/xfeatures2d.hpp>
 #include <yaml-cpp/yaml.h>
 
+#include "Image.h"
+#include "GaussianBlur.h"
+
+
 int main(){
-    std::cout<<"Hello World\n";
+
+    const std::string filePath = "../data/dhoni.jpg";
+    Image image(filePath);
+    cv::Mat img = image.getData();
+    cv::Mat gray;
+    cv::cvtColor(img, gray, cv::COLOR_BGR2GRAY);
+    cv::Mat blurredImage;
+    GaussianBlur gb;
+    blurredImage = gb.applyGaussianBlur(gray, 7, 5.0);
+    Image blurredImageObj(blurredImage);
+    blurredImageObj.save("data/blurredImage.jpg", blurredImage);
+    blurredImageObj.display("Blurred Image", blurredImage);
+
+
+
     return 0;
 }
