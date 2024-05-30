@@ -13,6 +13,8 @@ class GaussianBlur{
         
         cv::Mat applyGaussianBlur(cv::Mat& image, int kernelSize, double sigma);
         
+        cv::Mat applyGaussianBlurMT(cv::Mat& image, int kernelSize, double sigma);
+        
         void createGaussianKernel(int kernelSize, double sigma, std::vector<float>& kernel);
 
         void applyGaussianKernelX(cv::Mat& image, std::vector<float>& kernel, cv::Mat& blurredImage);

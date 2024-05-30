@@ -236,3 +236,25 @@ cv::Mat GaussianBlur::applyGaussianBlur(cv::Mat& image, int kernelSize, double s
     // Return the blurred image 
     return blurredImage; 
 }
+
+cv::Mat GaussianBlur::applyGaussianBlurMT(cv::Mat& image, int kernelSize, double sigma){
+    
+    cv::Mat blurredImage(image.size(), image.type()); 
+
+    std::vector<float> kernel(kernelSize, 0.0); 
+    
+    createGaussianKernel(kernelSize, sigma, kernel);
+
+    // Do convolution in x direction 
+    applyGaussianKernelX(image, kernel, blurredImage);
+    edgePaddingX(image, kernel, blurredImage);
+
+    // Do convolution in y direction 
+    applyGaussianKernelY(image, kernel, blurredImage);
+    edgePaddingY(image, kernel, blurredImage);
+
+    // Take care of the edge padding 
+
+    // Return the blurred image 
+    return blurredImage; 
+}

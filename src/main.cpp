@@ -28,13 +28,13 @@ int main(){
     cv::Mat gray;
     cv::cvtColor(img, gray, cv::COLOR_BGR2GRAY);
     cv::Mat blurredImage;
+    // Multithreaded version 
+    cv::Mat blurredImageMT;
     GaussianBlur gb;
     blurredImage = gb.applyGaussianBlur(gray, 7, 5.0);
+    blurredImageMT = gb.applyGaussianBlurMT(gray, 7, 5.0);
     Image blurredImageObj(blurredImage);
     blurredImageObj.save("data/blurredImage.jpg", blurredImage);
     blurredImageObj.display("Blurred Image", blurredImage);
-
-
-
     return 0;
 }
