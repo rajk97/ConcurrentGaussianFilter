@@ -235,6 +235,30 @@ src/Image.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mtgp.dir/build.make CMakeFiles/mtgp.dir/src/Image.cpp.s
 .PHONY : src/Image.cpp.s
 
+src/ThreadUtils.o: src/ThreadUtils.cpp.o
+.PHONY : src/ThreadUtils.o
+
+# target to build an object file
+src/ThreadUtils.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mtgp.dir/build.make CMakeFiles/mtgp.dir/src/ThreadUtils.cpp.o
+.PHONY : src/ThreadUtils.cpp.o
+
+src/ThreadUtils.i: src/ThreadUtils.cpp.i
+.PHONY : src/ThreadUtils.i
+
+# target to preprocess a source file
+src/ThreadUtils.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mtgp.dir/build.make CMakeFiles/mtgp.dir/src/ThreadUtils.cpp.i
+.PHONY : src/ThreadUtils.cpp.i
+
+src/ThreadUtils.s: src/ThreadUtils.cpp.s
+.PHONY : src/ThreadUtils.s
+
+# target to generate assembly for a file
+src/ThreadUtils.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mtgp.dir/build.make CMakeFiles/mtgp.dir/src/ThreadUtils.cpp.s
+.PHONY : src/ThreadUtils.cpp.s
+
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
@@ -303,6 +327,9 @@ help:
 	@echo "... src/Image.o"
 	@echo "... src/Image.i"
 	@echo "... src/Image.s"
+	@echo "... src/ThreadUtils.o"
+	@echo "... src/ThreadUtils.i"
+	@echo "... src/ThreadUtils.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

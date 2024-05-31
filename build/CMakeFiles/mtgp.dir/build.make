@@ -97,10 +97,24 @@ CMakeFiles/mtgp.dir/src/Image.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/mtgp.dir/src/Image.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/raj/Documents/Projects/computervision/ConcurrentGaussianFilter/src/Image.cpp -o CMakeFiles/mtgp.dir/src/Image.cpp.s
 
+CMakeFiles/mtgp.dir/src/ThreadUtils.cpp.o: CMakeFiles/mtgp.dir/flags.make
+CMakeFiles/mtgp.dir/src/ThreadUtils.cpp.o: /home/raj/Documents/Projects/computervision/ConcurrentGaussianFilter/src/ThreadUtils.cpp
+CMakeFiles/mtgp.dir/src/ThreadUtils.cpp.o: CMakeFiles/mtgp.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/raj/Documents/Projects/computervision/ConcurrentGaussianFilter/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/mtgp.dir/src/ThreadUtils.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/mtgp.dir/src/ThreadUtils.cpp.o -MF CMakeFiles/mtgp.dir/src/ThreadUtils.cpp.o.d -o CMakeFiles/mtgp.dir/src/ThreadUtils.cpp.o -c /home/raj/Documents/Projects/computervision/ConcurrentGaussianFilter/src/ThreadUtils.cpp
+
+CMakeFiles/mtgp.dir/src/ThreadUtils.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/mtgp.dir/src/ThreadUtils.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/raj/Documents/Projects/computervision/ConcurrentGaussianFilter/src/ThreadUtils.cpp > CMakeFiles/mtgp.dir/src/ThreadUtils.cpp.i
+
+CMakeFiles/mtgp.dir/src/ThreadUtils.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/mtgp.dir/src/ThreadUtils.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/raj/Documents/Projects/computervision/ConcurrentGaussianFilter/src/ThreadUtils.cpp -o CMakeFiles/mtgp.dir/src/ThreadUtils.cpp.s
+
 CMakeFiles/mtgp.dir/src/main.cpp.o: CMakeFiles/mtgp.dir/flags.make
 CMakeFiles/mtgp.dir/src/main.cpp.o: /home/raj/Documents/Projects/computervision/ConcurrentGaussianFilter/src/main.cpp
 CMakeFiles/mtgp.dir/src/main.cpp.o: CMakeFiles/mtgp.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/raj/Documents/Projects/computervision/ConcurrentGaussianFilter/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/mtgp.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/raj/Documents/Projects/computervision/ConcurrentGaussianFilter/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/mtgp.dir/src/main.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/mtgp.dir/src/main.cpp.o -MF CMakeFiles/mtgp.dir/src/main.cpp.o.d -o CMakeFiles/mtgp.dir/src/main.cpp.o -c /home/raj/Documents/Projects/computervision/ConcurrentGaussianFilter/src/main.cpp
 
 CMakeFiles/mtgp.dir/src/main.cpp.i: cmake_force
@@ -114,7 +128,7 @@ CMakeFiles/mtgp.dir/src/main.cpp.s: cmake_force
 CMakeFiles/mtgp.dir/src/tracy/public/TracyClient.cpp.o: CMakeFiles/mtgp.dir/flags.make
 CMakeFiles/mtgp.dir/src/tracy/public/TracyClient.cpp.o: /home/raj/Documents/Projects/computervision/ConcurrentGaussianFilter/src/tracy/public/TracyClient.cpp
 CMakeFiles/mtgp.dir/src/tracy/public/TracyClient.cpp.o: CMakeFiles/mtgp.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/raj/Documents/Projects/computervision/ConcurrentGaussianFilter/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/mtgp.dir/src/tracy/public/TracyClient.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/raj/Documents/Projects/computervision/ConcurrentGaussianFilter/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/mtgp.dir/src/tracy/public/TracyClient.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/mtgp.dir/src/tracy/public/TracyClient.cpp.o -MF CMakeFiles/mtgp.dir/src/tracy/public/TracyClient.cpp.o.d -o CMakeFiles/mtgp.dir/src/tracy/public/TracyClient.cpp.o -c /home/raj/Documents/Projects/computervision/ConcurrentGaussianFilter/src/tracy/public/TracyClient.cpp
 
 CMakeFiles/mtgp.dir/src/tracy/public/TracyClient.cpp.i: cmake_force
@@ -129,6 +143,7 @@ CMakeFiles/mtgp.dir/src/tracy/public/TracyClient.cpp.s: cmake_force
 mtgp_OBJECTS = \
 "CMakeFiles/mtgp.dir/src/GaussianBlur.cpp.o" \
 "CMakeFiles/mtgp.dir/src/Image.cpp.o" \
+"CMakeFiles/mtgp.dir/src/ThreadUtils.cpp.o" \
 "CMakeFiles/mtgp.dir/src/main.cpp.o" \
 "CMakeFiles/mtgp.dir/src/tracy/public/TracyClient.cpp.o"
 
@@ -137,6 +152,7 @@ mtgp_EXTERNAL_OBJECTS =
 
 mtgp: CMakeFiles/mtgp.dir/src/GaussianBlur.cpp.o
 mtgp: CMakeFiles/mtgp.dir/src/Image.cpp.o
+mtgp: CMakeFiles/mtgp.dir/src/ThreadUtils.cpp.o
 mtgp: CMakeFiles/mtgp.dir/src/main.cpp.o
 mtgp: CMakeFiles/mtgp.dir/src/tracy/public/TracyClient.cpp.o
 mtgp: CMakeFiles/mtgp.dir/build.make
@@ -210,7 +226,7 @@ mtgp: /usr/local/lib/libopencv_cudaarithm.so.4.7.0
 mtgp: /usr/local/lib/libopencv_core.so.4.7.0
 mtgp: /usr/local/lib/libopencv_cudev.so.4.7.0
 mtgp: CMakeFiles/mtgp.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/raj/Documents/Projects/computervision/ConcurrentGaussianFilter/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable mtgp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/raj/Documents/Projects/computervision/ConcurrentGaussianFilter/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable mtgp"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/mtgp.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

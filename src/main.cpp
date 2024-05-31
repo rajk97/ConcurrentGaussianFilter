@@ -31,10 +31,10 @@ int main(){
     // Multithreaded version 
     cv::Mat blurredImageMT;
     GaussianBlur gb;
-    blurredImage = gb.applyGaussianBlur(gray, 7, 5.0);
-    blurredImageMT = gb.applyGaussianBlurMT(gray, 7, 5.0);
-    Image blurredImageObj(blurredImage);
-    blurredImageObj.save("data/blurredImage.jpg", blurredImage);
-    blurredImageObj.display("Blurred Image", blurredImage);
+    blurredImage = gb.applyGaussianBlur(gray, 51, 5.0);
+    blurredImageMT = gb.applyGaussianBlurMT(gray, 51, 5.0);
+    Image blurredImageObj(blurredImageMT);
+    blurredImageObj.save("data/blurredImage.jpg", blurredImageMT);
+    blurredImageObj.display("Blurred Image", blurredImageMT);
     return 0;
 }
