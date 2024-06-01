@@ -83,6 +83,8 @@ void GaussianBlur::applyGaussianKernelX(const cv::Mat& image, const std::vector<
 
 void GaussianBlur::applyGaussianKernelXMT(const cv::Mat& image, const std::vector<float>& kernel, cv::Mat& blurredImage, const int startRow, const int endRow){
 
+    std::cout<<"Thread ID 1: "<<std::this_thread::get_id()<<std::endl;
+
     try{
         
         int kernelSize = kernel.size(); 
@@ -95,22 +97,30 @@ void GaussianBlur::applyGaussianKernelXMT(const cv::Mat& image, const std::vecto
         int rows = image.rows; 
         int cols = image.cols;
 
+        std::cout<<"Rows: "<<rows<<std::endl;
+        std::cout<<"Cols: "<<cols<<std::endl;
+        std::cout<<"Kernel size: "<<kernelSize<<std::endl;
+
         if(kernelSize>cols){
             throw std::runtime_error("Kernel size is greater than image width");
         }
-        // if(kernelSize>rows){
-        //     throw std::runtime_error("Kernel size is greater than image height");
-        // }
+        if(kernelSize>rows){
+            throw std::runtime_error("Kernel size is greater than image height");
+        }
 
         for(int i=startRow; i<endRow; i++){
             for(int j=size; j<cols-size; j++){
                 float sum{0.0}; 
+                
                 for(int k=-size; k<=size; k++){
                     sum+=kernel[size+k]*image.at<uchar>(i, j+k);
                 }
                 blurredImage.at<uchar>(i, j) = cv::saturate_cast<uchar>(sum);
             }
         }
+
+        std::cout<<"Thread ID 2: "<<std::this_thread::get_id()<<std::endl;
+
     }
     catch(...){
         throw std::runtime_error("Error applying Gaussian Kernel in x direction");
@@ -303,9 +313,9 @@ cv::Mat GaussianBlur::applyGaussianBlurMT(cv::Mat& image, int kernelSize, double
     int rowsPerThread = rows/nThreads; 
     int remainingRows = rows%nThreads; 
 
-    std::vector<std::thread> threads; 
-    // std::vector<ThreadGuard> threadGuards;
-    std::vector<std::unique_ptr<ThreadGuard>> threadGuards;  
+    // std::vector<std::thread> threads; 
+    // // std::vector<ThreadGuard> threadGuards;
+    // std::vector<std::unique_ptr<ThreadGuard>> threadGuards;  
     int currentRow{0};
 
     // try{
@@ -338,42 +348,76 @@ cv::Mat GaussianBlur::applyGaussianBlurMT(cv::Mat& image, int kernelSize, double
     //     throw;
     // }
 
-    try {
-        for (int i = 0; i < nThreads; ++i) {
-            int startRow = currentRow;
-            int endRow = currentRow + rowsPerThread + (i < remainingRows ? 1 : 0);
+    // try {
+    //     for (int i = 0; i < nThreads; ++i) {
+    //         int startRow = currentRow;
+    //         int endRow = currentRow + rowsPerThread + (i < remainingRows ? 1 : 0);
 
-            threads.emplace_back(std::thread(&GaussianBlur::applyGaussianKernelXMT, this, std::ref(image), std::ref(kernel), std::ref(blurredImage), startRow, endRow));
-            // threadGuards.emplace_back(std::make_unique<ThreadGuard>(ThreadGuard(threads.back())));
+    //         // threads.emplace_back(&GaussianBlur::applyGaussianKernelXMT, this, std::ref(image), std::ref(kernel), std::ref(blurredImage), startRow, endRow);
+    //         // threadGuards.emplace_back(std::make_unique<ThreadGuard>(threads.back()));
 
-            currentRow = endRow;
-        }
+    //         currentRow = endRow;
+    //     }
 
-        // Join all threads
-        for (auto& t : threads) {
-            if (t.joinable()) {
-                t.join();
-            }
-        }
-    } catch (const std::exception& e) {
-        std::cerr << "std exception: " << e.what() << std::endl;
-        // Join all threads in case of an exception
-        for (auto& t : threads) {
-            if (t.joinable()) {
-                t.join();
-            }
-        }
-        throw; // Re-throw the exception after joining
-    } catch (...) {
-        std::cerr << "Unknown exception" << std::endl;
-        // Join all threads in case of an unknown exception
-        for (auto& t : threads) {
-            if (t.joinable()) {
-                t.join();
-            }
-        }
-        throw; // Re-throw the exception after joining
+    //     // ThreadGuard tg(threads.back());
+    //     // // std::unique_ptr<ThreadGuard>tp = std::make_unique<ThreadGuard>(threads.back());
+    //     // threadGuards.emplace_back(std::make_unique<ThreadGuard>(std::move(std::thread(&GaussianBlur::applyGaussianKernelXMT, this, std::ref(image), std::ref(kernel), std::ref(blurredImage), 0, 2))));
+
+    //     // Join all threads
+    //     // for (auto& t : threads) {
+    //     //     if (t.joinable()) {
+    //     //         t.join();
+    //     //     }
+    //     // }
+    // }
+    //  catch (const std::exception& e) {
+    //     std::cerr << "std exception: " << e.what() << std::endl;
+    //     // Join all threads in case of an exception
+    //     for (auto& t : threads) {
+    //         if (t.joinable()) {
+    //             t.join();
+    //         }
+    //     }
+    //     throw; // Re-throw the exception after joining
+    // } catch (...) {
+    //     std::cerr << "Unknown exception" << std::endl;
+    //     // Join all threads in case of an unknown exception
+    //     for (auto& t : threads) {
+    //         if (t.joinable()) {
+    //             t.join();
+    //         }
+    //     }
+    //     throw; // Re-throw the exception after joining
+    // }
+
+    try{
+    
+    // int a = 10;
+    // int b = 1000; 
+    // Create a thread object at the last index of threads
+    std::thread t(&GaussianBlur::applyGaussianKernelXMT, this, std::ref(image), std::ref(kernel), std::ref(blurredImage), 10, 1000);
+        // std::cout<<"Test begin"<<std::endl;
+        // std::unique_ptr<ThreadGuard> tg = std::make_unique<ThreadGuard>(t);
+        // // Print the thread ID of threads.back()
+        // std::cout<<"Thread ID: "<<threads.back().get_id()<<std::endl;
+    
+    // if(t.joinable()){
+    //     t.join();   
+    // }
+    std::vector<std::unique_ptr<ThreadGuard>> threadGuards;
+    threadGuards.emplace_back(std::make_unique<ThreadGuard>(t));
+    // std::unique_ptr<ThreadGuard> tg = std::make_unique<ThreadGuard>(t);
+
     }
+    catch(std::exception& e){
+        std::cerr<<"std exception: "<<e.what()<<std::endl;
+    }
+    
+
+
+            // threadGuards.emplace_back(std::make_unique<ThreadGuard>(threads.back()));
+
+    std::cout<<"Before return"<<std::endl;
 
 
     // Do convolution in x direction 

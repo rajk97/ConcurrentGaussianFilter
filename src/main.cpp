@@ -31,8 +31,8 @@ int main(){
     // Multithreaded version 
     cv::Mat blurredImageMT;
     GaussianBlur gb;
-    blurredImage = gb.applyGaussianBlur(gray, 51, 5.0);
-    blurredImageMT = gb.applyGaussianBlurMT(gray, 51, 5.0);
+    blurredImage = gb.applyGaussianBlur(gray, 5, 5.0);
+    blurredImageMT = gb.applyGaussianBlurMT(gray, 5, 5.0);
     Image blurredImageObj(blurredImageMT);
     blurredImageObj.save("data/blurredImage.jpg", blurredImageMT);
     blurredImageObj.display("Blurred Image", blurredImageMT);

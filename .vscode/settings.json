@@ -74,6 +74,8 @@
         "__tuple": "cpp",
         "ios": "cpp",
         "locale": "cpp",
-        "shared_mutex": "cpp"
+        "shared_mutex": "cpp",
+        "any": "cpp",
+        "optional": "cpp"
     }
 }
