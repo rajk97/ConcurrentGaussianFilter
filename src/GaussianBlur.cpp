@@ -413,6 +413,7 @@ cv::Mat GaussianBlur::applyGaussianBlurMT(cv::Mat& image, int kernelSize, double
         std::cerr<<"std exception: "<<e.what()<<std::endl;
     }
     
+    
 
 
             // threadGuards.emplace_back(std::make_unique<ThreadGuard>(threads.back()));
