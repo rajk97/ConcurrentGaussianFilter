@@ -313,40 +313,43 @@ cv::Mat GaussianBlur::applyGaussianBlurMT(cv::Mat& image, int kernelSize, double
     int rowsPerThread = rows/nThreads; 
     int remainingRows = rows%nThreads; 
 
-    // std::vector<std::thread> threads; 
-    // // std::vector<ThreadGuard> threadGuards;
-    // std::vector<std::unique_ptr<ThreadGuard>> threadGuards;  
+    std::vector<std::thread> threads; 
+    // std::vector<ThreadGuard> threadGuards;
+    std::vector<std::unique_ptr<ThreadGuard>> threadGuards;  
     int currentRow{0};
 
-    // try{
+    threads.reserve(nThreads);
+    threadGuards.reserve(nThreads);
 
-    // for(int i=0; i<nThreads; i++){
+    try{
 
-    //     int startRow = currentRow; 
-    //     int endRow = currentRow + rowsPerThread + (i<remainingRows?1:0);
+    for(int i=0; i<nThreads; i++){
 
-    //     try{
-    //     threads.emplace_back(&GaussianBlur::applyGaussianKernelXMT, this, std::ref(image), std::ref(kernel), std::ref(blurredImage), startRow, endRow);
-    //     }
-    //     catch(...){
-    //         throw std::runtime_error("Exact spot");
-    //     }
-    //     // threadGuards.emplace_back(std::make_unique<ThreadGuard>(threads.back()));
-    //     currentRow = endRow;
-    //     startRow = endRow;
-    // }
+        int startRow = currentRow; 
+        int endRow = currentRow + rowsPerThread + (i<remainingRows?1:0);
 
-    // }
+        try{
+        threads.emplace_back(&GaussianBlur::applyGaussianKernelXMT, this, std::ref(image), std::ref(kernel), std::ref(blurredImage), startRow, endRow);
+        }
+        catch(...){
+            throw std::runtime_error("Exact spot");
+        }
+        threadGuards.emplace_back(std::make_unique<ThreadGuard>(threads.back()));
+        currentRow = endRow;
+        startRow = endRow;
+    }
 
-    // catch(const std::exception& e){
-    //     std::cerr<<"std exception: "<<e.what()<<std::endl; 
-    // }
+    }
 
-    // catch(...){
-    //     // print what went wrong
-    //     std::cerr<<"Unknown exception"<<std::endl;
-    //     throw;
-    // }
+    catch(const std::exception& e){
+        std::cerr<<"std exception: "<<e.what()<<std::endl; 
+    }
+
+    catch(...){
+        // print what went wrong
+        std::cerr<<"Unknown exception"<<std::endl;
+        throw;
+    }
 
     // try {
     //     for (int i = 0; i < nThreads; ++i) {
@@ -390,30 +393,30 @@ cv::Mat GaussianBlur::applyGaussianBlurMT(cv::Mat& image, int kernelSize, double
     //     throw; // Re-throw the exception after joining
     // }
 
-    try{
+    // try{
     
-    // int a = 10;
-    // int b = 1000; 
-    // Create a thread object at the last index of threads
-    std::thread t(&GaussianBlur::applyGaussianKernelXMT, this, std::ref(image), std::ref(kernel), std::ref(blurredImage), 10, 1000);
-        // std::cout<<"Test begin"<<std::endl;
-        // std::unique_ptr<ThreadGuard> tg = std::make_unique<ThreadGuard>(t);
-        // // Print the thread ID of threads.back()
-        // std::cout<<"Thread ID: "<<threads.back().get_id()<<std::endl;
+    // // int a = 10;
+    // // int b = 1000; 
+    // // Create a thread object at the last index of threads
+    // std::thread t(&GaussianBlur::applyGaussianKernelXMT, this, std::ref(image), std::ref(kernel), std::ref(blurredImage), 10, 1000);
+    //     // std::cout<<"Test begin"<<std::endl;
+    //     // std::unique_ptr<ThreadGuard> tg = std::make_unique<ThreadGuard>(t);
+    //     // // Print the thread ID of threads.back()
+    //     // std::cout<<"Thread ID: "<<threads.back().get_id()<<std::endl;
     
-    // if(t.joinable()){
-    //     t.join();   
-    // }
-    std::vector<std::unique_ptr<ThreadGuard>> threadGuards;
-    threadGuards.emplace_back(std::make_unique<ThreadGuard>(t));
-    // std::unique_ptr<ThreadGuard> tg = std::make_unique<ThreadGuard>(t);
+    // // if(t.joinable()){
+    // //     t.join();   
+    // // }
+    // std::vector<std::unique_ptr<ThreadGuard>> threadGuards;
+    // threadGuards.emplace_back(std::make_unique<ThreadGuard>(t));
+    // // std::unique_ptr<ThreadGuard> tg = std::make_unique<ThreadGuard>(t);
 
-    }
-    catch(std::exception& e){
-        std::cerr<<"std exception: "<<e.what()<<std::endl;
-    }
+    // }
+    // catch(std::exception& e){
+    //     std::cerr<<"std exception: "<<e.what()<<std::endl;
+    // }
     
-    
+
 
 
             // threadGuards.emplace_back(std::make_unique<ThreadGuard>(threads.back()));
