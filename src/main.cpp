@@ -31,8 +31,19 @@ int main(){
     // Multithreaded version 
     cv::Mat blurredImageMT;
     GaussianBlur gb;
+
+    auto normalStart = std::chrono::steady_clock::now();
     blurredImage = gb.applyGaussianBlur(gray, 51, 5.0);
+    auto normalEnd = std::chrono::steady_clock::now();
+    auto normalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(normalEnd - normalStart);
+    std::cout<<"Normal Gaussian Blur Time: "<<normalDuration.count()<<" ms"<<std::endl; 
+
+    auto mtStart = std::chrono::steady_clock::now();
     blurredImageMT = gb.applyGaussianBlurMT(gray, 51, 5.0);
+    auto mtEnd = std::chrono::steady_clock::now();
+    auto mtDuration = std::chrono::duration_cast<std::chrono::milliseconds>(mtEnd - mtStart);
+    std::cout<<"Multithreaded Gaussian Blur Time: "<<mtDuration.count()<<" ms"<<std::endl;
+    
     Image blurredImageObj(blurredImageMT);
     blurredImageObj.save("data/blurredImage.jpg", blurredImageMT);
     blurredImageObj.display("Blurred Image", blurredImageMT);

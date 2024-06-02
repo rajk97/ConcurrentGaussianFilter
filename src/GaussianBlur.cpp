@@ -83,8 +83,6 @@ void GaussianBlur::applyGaussianKernelX(const cv::Mat& image, const std::vector<
 
 void GaussianBlur::applyGaussianKernelXMT(const cv::Mat& image, const std::vector<float>& kernel, cv::Mat& blurredImage, const int startRow, const int endRow){
 
-    std::cout<<"Thread ID 1: "<<std::this_thread::get_id()<<std::endl;
-
     try{
         
         int kernelSize = kernel.size(); 
@@ -96,10 +94,6 @@ void GaussianBlur::applyGaussianKernelXMT(const cv::Mat& image, const std::vecto
 
         int rows = image.rows; 
         int cols = image.cols;
-
-        std::cout<<"Rows: "<<rows<<std::endl;
-        std::cout<<"Cols: "<<cols<<std::endl;
-        std::cout<<"Kernel size: "<<kernelSize<<std::endl;
 
         if(kernelSize>cols){
             throw std::runtime_error("Kernel size is greater than image width");
@@ -118,9 +112,6 @@ void GaussianBlur::applyGaussianKernelXMT(const cv::Mat& image, const std::vecto
                 blurredImage.at<uchar>(i, j) = cv::saturate_cast<uchar>(sum);
             }
         }
-
-        std::cout<<"Thread ID 2: "<<std::this_thread::get_id()<<std::endl;
-
     }
     catch(...){
         throw std::runtime_error("Error applying Gaussian Kernel in x direction");
@@ -276,11 +267,11 @@ cv::Mat GaussianBlur::applyGaussianBlur(cv::Mat& image, int kernelSize, double s
 
     // Do convolution in x direction 
     applyGaussianKernelX(image, kernel, blurredImage);
-    edgePaddingX(image, kernel, blurredImage);
+    // edgePaddingX(image, kernel, blurredImage);
 
-    // Do convolution in y direction 
-    applyGaussianKernelY(image, kernel, blurredImage);
-    edgePaddingY(image, kernel, blurredImage);
+    // // Do convolution in y direction 
+    // applyGaussianKernelY(image, kernel, blurredImage);
+    // edgePaddingY(image, kernel, blurredImage);
 
     // Take care of the edge padding 
 
@@ -328,12 +319,7 @@ cv::Mat GaussianBlur::applyGaussianBlurMT(cv::Mat& image, int kernelSize, double
         int startRow = currentRow; 
         int endRow = currentRow + rowsPerThread + (i<remainingRows?1:0);
 
-        try{
         threads.emplace_back(&GaussianBlur::applyGaussianKernelXMT, this, std::ref(image), std::ref(kernel), std::ref(blurredImage), startRow, endRow);
-        }
-        catch(...){
-            throw std::runtime_error("Exact spot");
-        }
         threadGuards.emplace_back(std::make_unique<ThreadGuard>(threads.back()));
         currentRow = endRow;
         startRow = endRow;
