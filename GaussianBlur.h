@@ -7,6 +7,13 @@
 #include <vector>
 #include <memory>
 
+#ifdef ENABLE_TRACY_PROFILING
+ #include "Tracy.hpp"
+ #define MY_PROFILE_SCOPE ZoneScoped
+#else
+ #define MY_PROFILE_SCOPE
+#endif
+
 class GaussianBlur{
     private:
     public:

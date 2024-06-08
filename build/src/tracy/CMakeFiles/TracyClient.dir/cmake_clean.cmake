@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/TracyClient.dir/public/TracyClient.cpp.o"
-  "CMakeFiles/TracyClient.dir/public/TracyClient.cpp.o.d"
-  "libTracyClient.a"
   "libTracyClient.pdb"
+  "libTracyClient.a"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -1,5 +1,6 @@
 #include "GaussianBlur.h"
 #include "ThreadUtils.h"
+// #include "Tracy.hpp"
 
 GaussianBlur::GaussianBlur(){
 
@@ -10,6 +11,8 @@ GaussianBlur::~GaussianBlur(){
 }
 
 void GaussianBlur::createGaussianKernel(int kernelSize, double sigma, std::vector<float>& kernel){
+
+    ZoneScopedN("Create Gaussian Kernel");
 
     try{
         if(kernelSize%2==0){
@@ -43,6 +46,8 @@ void GaussianBlur::createGaussianKernel(int kernelSize, double sigma, std::vecto
     }
 }
 void GaussianBlur::applyGaussianKernelX(const cv::Mat& image, const std::vector<float>& kernel, cv::Mat& blurredImage){
+
+    ZoneScopedN("Apply Gaussian Kernel in X direction");
 
     try{
         
@@ -82,6 +87,8 @@ void GaussianBlur::applyGaussianKernelX(const cv::Mat& image, const std::vector<
 }
 
 void GaussianBlur::applyGaussianKernelXMT(const cv::Mat& image, const std::vector<float>& kernel, cv::Mat& blurredImage, const int startRow, const int endRow){
+
+    ZoneScopedN("MULTI Apply Gaussian Kernel in X direction");
 
     try{
         
@@ -124,6 +131,8 @@ void GaussianBlur::applyGaussianKernelXMT(const cv::Mat& image, const std::vecto
 
 void GaussianBlur::applyGaussianKernelY(const cv::Mat& image, const std::vector<float>& kernel, cv::Mat& blurredImage){
 
+    ZoneScopedN("Apply Gaussian Kernel in Y direction");
+
     try{
         
         int kernelSize = kernel.size(); 
@@ -162,6 +171,8 @@ void GaussianBlur::applyGaussianKernelY(const cv::Mat& image, const std::vector<
 }
 
 void GaussianBlur::edgePaddingX(cv::Mat& image, std::vector<float>& kernel, cv::Mat& blurredImage){
+
+    ZoneScopedN("Edge Padding in X direction");
 
     try{
 
@@ -211,6 +222,8 @@ void GaussianBlur::edgePaddingX(cv::Mat& image, std::vector<float>& kernel, cv::
 
 void GaussianBlur::edgePaddingY(cv::Mat& image, std::vector<float>& kernel, cv::Mat& blurredImage){
 
+    ZoneScopedN("Edge Padding in Y direction");
+
     try{
 
         if(image.empty()){
@@ -259,6 +272,8 @@ void GaussianBlur::edgePaddingY(cv::Mat& image, std::vector<float>& kernel, cv::
 
 cv::Mat GaussianBlur::applyGaussianBlur(cv::Mat& image, int kernelSize, double sigma){
     
+    ZoneScopedN("Normal Apply Gaussian Blur");
+
     cv::Mat blurredImage(image.size(), image.type()); 
 
     std::vector<float> kernel(kernelSize, 0.0); 
@@ -281,6 +296,7 @@ cv::Mat GaussianBlur::applyGaussianBlur(cv::Mat& image, int kernelSize, double s
 
 cv::Mat GaussianBlur::applyGaussianBlurMT(cv::Mat& image, int kernelSize, double sigma){
     
+    ZoneScopedN("Multithreaded Apply Gaussian Blur");
 
     cv::Mat blurredImage(image.size(), image.type()); 
 
@@ -314,16 +330,16 @@ cv::Mat GaussianBlur::applyGaussianBlurMT(cv::Mat& image, int kernelSize, double
 
     try{
 
-    for(int i=0; i<nThreads; i++){
+        for(int i=0; i<nThreads; i++){
 
-        int startRow = currentRow; 
-        int endRow = currentRow + rowsPerThread + (i<remainingRows?1:0);
+            int startRow = currentRow; 
+            int endRow = currentRow + rowsPerThread + (i<remainingRows?1:0);
 
-        threads.emplace_back(&GaussianBlur::applyGaussianKernelXMT, this, std::ref(image), std::ref(kernel), std::ref(blurredImage), startRow, endRow);
-        threadGuards.emplace_back(std::make_unique<ThreadGuard>(threads.back()));
-        currentRow = endRow;
-        startRow = endRow;
-    }
+            threads.emplace_back(&GaussianBlur::applyGaussianKernelXMT, this, std::ref(image), std::ref(kernel), std::ref(blurredImage), startRow, endRow);
+            threadGuards.emplace_back(std::make_unique<ThreadGuard>(threads.back()));
+            currentRow = endRow;
+            startRow = endRow;
+        }
 
     }
 
@@ -336,89 +352,6 @@ cv::Mat GaussianBlur::applyGaussianBlurMT(cv::Mat& image, int kernelSize, double
         std::cerr<<"Unknown exception"<<std::endl;
         throw;
     }
-
-    // try {
-    //     for (int i = 0; i < nThreads; ++i) {
-    //         int startRow = currentRow;
-    //         int endRow = currentRow + rowsPerThread + (i < remainingRows ? 1 : 0);
-
-    //         // threads.emplace_back(&GaussianBlur::applyGaussianKernelXMT, this, std::ref(image), std::ref(kernel), std::ref(blurredImage), startRow, endRow);
-    //         // threadGuards.emplace_back(std::make_unique<ThreadGuard>(threads.back()));
-
-    //         currentRow = endRow;
-    //     }
-
-    //     // ThreadGuard tg(threads.back());
-    //     // // std::unique_ptr<ThreadGuard>tp = std::make_unique<ThreadGuard>(threads.back());
-    //     // threadGuards.emplace_back(std::make_unique<ThreadGuard>(std::move(std::thread(&GaussianBlur::applyGaussianKernelXMT, this, std::ref(image), std::ref(kernel), std::ref(blurredImage), 0, 2))));
-
-    //     // Join all threads
-    //     // for (auto& t : threads) {
-    //     //     if (t.joinable()) {
-    //     //         t.join();
-    //     //     }
-    //     // }
-    // }
-    //  catch (const std::exception& e) {
-    //     std::cerr << "std exception: " << e.what() << std::endl;
-    //     // Join all threads in case of an exception
-    //     for (auto& t : threads) {
-    //         if (t.joinable()) {
-    //             t.join();
-    //         }
-    //     }
-    //     throw; // Re-throw the exception after joining
-    // } catch (...) {
-    //     std::cerr << "Unknown exception" << std::endl;
-    //     // Join all threads in case of an unknown exception
-    //     for (auto& t : threads) {
-    //         if (t.joinable()) {
-    //             t.join();
-    //         }
-    //     }
-    //     throw; // Re-throw the exception after joining
-    // }
-
-    // try{
-    
-    // // int a = 10;
-    // // int b = 1000; 
-    // // Create a thread object at the last index of threads
-    // std::thread t(&GaussianBlur::applyGaussianKernelXMT, this, std::ref(image), std::ref(kernel), std::ref(blurredImage), 10, 1000);
-    //     // std::cout<<"Test begin"<<std::endl;
-    //     // std::unique_ptr<ThreadGuard> tg = std::make_unique<ThreadGuard>(t);
-    //     // // Print the thread ID of threads.back()
-    //     // std::cout<<"Thread ID: "<<threads.back().get_id()<<std::endl;
-    
-    // // if(t.joinable()){
-    // //     t.join();   
-    // // }
-    // std::vector<std::unique_ptr<ThreadGuard>> threadGuards;
-    // threadGuards.emplace_back(std::make_unique<ThreadGuard>(t));
-    // // std::unique_ptr<ThreadGuard> tg = std::make_unique<ThreadGuard>(t);
-
-    // }
-    // catch(std::exception& e){
-    //     std::cerr<<"std exception: "<<e.what()<<std::endl;
-    // }
-    
-
-
-
-            // threadGuards.emplace_back(std::make_unique<ThreadGuard>(threads.back()));
-
-    std::cout<<"Before return"<<std::endl;
-
-
-    // Do convolution in x direction 
-    // applyGaussianKernelX(image, kernel, blurredImage);
-    // edgePaddingX(image, kernel, blurredImage);
-
-    // Do convolution in y direction 
-    // applyGaussianKernelY(image, kernel, blurredImage);
-    // edgePaddingY(image, kernel, blurredImage);
-
-    // Take care of the edge padding 
 
     // Return the blurred image 
     return blurredImage; 

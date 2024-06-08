@@ -12,14 +12,20 @@ find_package(yaml-cpp REQUIRED)
 find_package(Eigen3 REQUIRED)
 
 # Tracy Options 
-option(ENABLE_TRACY "Enable Tracy Profiling" OFF)
+option(ENABLE_TRACY "Enable Tracy Profiling" ON)
 option(TRACY_ON_DEMAND "" ON)
+
 add_subdirectory(src/tracy)
 
 
 if(ENABLE_TRACY)
-    add_compile_definitions(ENABLE_TRACY_PROFILING=1)
+    add_definitions(-DENABLE_TRACY_PROFILING=1)
 endif()
+
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "Build type" FORCE)
+endif()
+
 
 # Include directories
 include_directories(
